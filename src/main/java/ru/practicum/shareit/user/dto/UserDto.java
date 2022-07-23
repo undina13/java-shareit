@@ -18,6 +18,4 @@ public class UserDto {
 
     @Email
     private String email;
-
-
 }

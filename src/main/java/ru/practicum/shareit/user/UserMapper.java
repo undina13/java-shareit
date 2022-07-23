@@ -8,7 +8,6 @@ import ru.practicum.shareit.user.model.User;
 @UtilityClass
 public class UserMapper {
     public static UserDto toUserDto(User user) {
-
         return UserDto
                 .builder()
                 .id(user.getId())
@@ -18,7 +17,7 @@ public class UserMapper {
     }
 
     public static User toUser(UserDto userDto) {
-        if(userDto.getEmail()==null){
+        if (userDto.getEmail() == null) {
             throw new NullEmailException("Емейл не может быть null");
         }
         return new User(userDto.getId(),
