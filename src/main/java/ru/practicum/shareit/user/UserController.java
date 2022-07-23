@@ -1,12 +1,47 @@
 package ru.practicum.shareit.user;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.user.service.UserServiceImpl;
 
-/**
- * // TODO .
- */
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
+
 @RestController
 @RequestMapping(path = "/users")
 public class UserController {
+    private final UserService userService;
+
+    @Autowired
+    public UserController(UserServiceImpl userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping
+    Optional<UserDto> create(@Valid @RequestBody UserDto userDto){
+        return userService.create(userDto);
+    }
+
+    @PatchMapping("/{userId}")
+    public Optional<UserDto> update(@PathVariable Long userId, @RequestBody UserDto userDto) {
+        return userService.update(userId, userDto);
+    }
+
+    @DeleteMapping("/{userId}")
+    public void delete(@PathVariable Long userId) {
+        userService.delete(userId);
+    }
+
+    @GetMapping("/{userId}")
+    public Optional<UserDto> getUserById(@PathVariable Long userId) {
+        return userService.getUserById(userId);
+    }
+
+    @GetMapping
+    public List<UserDto> getAllUsers() {
+        return userService.getAllUsers();
+    }
 }
