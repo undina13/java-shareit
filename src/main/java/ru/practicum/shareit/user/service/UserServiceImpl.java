@@ -58,6 +58,7 @@ public class UserServiceImpl implements UserService {
         return UserMapper.toUserDto(userStorage.getUserById(userId));
     }
 
+    //метод для проверки уникальности емейла
     public void checkEmail(UserDto userDto) {
         if (userStorage.getAllUsers()
                 .stream()

@@ -28,12 +28,10 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto create(Long userId, ItemDto itemDto) {
-
         Item item = ItemMapper.toItem(itemDto);
         if (userStorage.getUserById(userId) == null) {
             throw new UserNotFoundException("User not found");
         }
-
         item.setOwner(userStorage.getUserById(userId));
         itemStorage.create(item);
         return ItemMapper.toItemDto(item);
@@ -41,6 +39,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto update(long userId, Long itemId, ItemDto itemDto) {
+        // нельзя изменить вещь, если ее нет в хранилище  или нет такого пользователя или вещь чужая
         if (userStorage.getUserById(userId) == null
                 || itemStorage.getItemById(itemId) == null
                 || !itemStorage.getItemById(itemId).getOwner().getId().equals(userId)) {
@@ -87,8 +86,10 @@ public class ItemServiceImpl implements ItemService {
             return new ArrayList<>();
         }
 
+// предикаты для поиска в наименовании и описании
         Predicate<Item> inName = item -> item.getName().toLowerCase().contains(text.toLowerCase());
         Predicate<Item> inDesc = item -> item.getDescription().toLowerCase().contains(text.toLowerCase());
+
         return itemStorage.getAllItems()
                 .stream()
                 .filter(inName.or(inDesc))
