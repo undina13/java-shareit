@@ -12,7 +12,6 @@ import ru.practicum.shareit.user.storage.UserStorage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -28,7 +27,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Optional<ItemDto> create(Long userId, ItemDto itemDto) {
+    public ItemDto create(Long userId, ItemDto itemDto) {
 
         Item item = ItemMapper.toItem(itemDto);
         if (userStorage.getUserById(userId) == null) {
@@ -37,11 +36,11 @@ public class ItemServiceImpl implements ItemService {
 
         item.setOwner(userStorage.getUserById(userId));
         itemStorage.create(item);
-        return Optional.of(ItemMapper.toItemDto(item));
+        return ItemMapper.toItemDto(item);
     }
 
     @Override
-    public Optional<ItemDto> update(long userId, Long itemId, ItemDto itemDto) {
+    public ItemDto update(long userId, Long itemId, ItemDto itemDto) {
         if (userStorage.getUserById(userId) == null
                 || itemStorage.getItemById(itemId) == null
                 || !itemStorage.getItemById(itemId).getOwner().getId().equals(userId)) {
@@ -61,13 +60,13 @@ public class ItemServiceImpl implements ItemService {
             item.setRequest(itemDto.getRequest());
         }
         itemStorage.update(item);
-        return Optional.of(ItemMapper.toItemDto(item));
+        return ItemMapper.toItemDto(item);
     }
 
     @Override
-    public Optional<ItemDto> getItemById(Long itemId) {
+    public ItemDto getItemById(Long itemId) {
         Item item = itemStorage.getItemById(itemId);
-        return Optional.of(ItemMapper.toItemDto(item));
+        return ItemMapper.toItemDto(item);
     }
 
     @Override

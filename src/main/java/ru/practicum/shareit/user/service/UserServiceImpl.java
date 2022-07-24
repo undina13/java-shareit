@@ -9,7 +9,6 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.UserStorage;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,14 +20,14 @@ public class UserServiceImpl implements UserService {
         this.userStorage = userStorage;
     }
 
-    public Optional<UserDto> create(UserDto userDto) {
+    public UserDto create(UserDto userDto) {
         checkEmail(userDto);
         User user = userStorage.create(UserMapper.toUser(userDto));
-        return Optional.of(UserMapper.toUserDto(user));
+        return UserMapper.toUserDto(user);
     }
 
     @Override
-    public Optional<UserDto> update(long userId, UserDto userDto) {
+    public UserDto update(long userId, UserDto userDto) {
         User user = userStorage.getUserById(userId);
         if (userDto.getName() != null) {
             user.setName(userDto.getName());
@@ -38,7 +37,7 @@ public class UserServiceImpl implements UserService {
             user.setEmail(userDto.getEmail());
         }
         userStorage.update(user);
-        return Optional.of(UserMapper.toUserDto(user));
+        return UserMapper.toUserDto(user);
     }
 
     @Override
@@ -55,8 +54,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserDto> getUserById(Long userId) {
-        return Optional.of(UserMapper.toUserDto(userStorage.getUserById(userId)));
+    public UserDto getUserById(Long userId) {
+        return UserMapper.toUserDto(userStorage.getUserById(userId));
     }
 
     public void checkEmail(UserDto userDto) {
