@@ -24,7 +24,7 @@ public class ItemController {
     @PostMapping()
     ItemDto create(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
                    @RequestBody @Valid ItemDto itemDto) {
-        log.debug("create item");
+        log.info("create item");
         return itemService.create(userId, itemDto);
     }
 
@@ -32,25 +32,25 @@ public class ItemController {
     ItemDto update(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
                    @PathVariable long itemId,
                    @RequestBody ItemDto itemDto) {
-        log.debug("update item id={}", itemId);
+        log.info("update item id={}", itemId);
         return itemService.update(userId, itemId, itemDto);
     }
 
     @GetMapping("/{itemId}")
     ItemDto getItemById(@PathVariable long itemId) {
-        log.debug("get item id={}", itemId);
+        log.info("get item id={}", itemId);
         return itemService.getItemById(itemId);
     }
 
     @GetMapping()
     List<ItemDto> getAllItemsByUser(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId) {
-        log.debug("get all items from user id={}", userId);
+        log.info("get all items from user id={}", userId);
         return itemService.getAllItemsByUser(userId);
     }
 
     @GetMapping("search")
     List<ItemDto> search(@RequestParam(required = false) String text) {
-        log.debug("search text={}", text);
+        log.info("search text={}", text);
         return itemService.search(text);
     }
 }
