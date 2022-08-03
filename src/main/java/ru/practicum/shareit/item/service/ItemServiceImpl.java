@@ -6,8 +6,11 @@ import ru.practicum.shareit.item.ItemMapper;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.exception.UserIsNotOwnerException;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.storage.ItemRepository;
 import ru.practicum.shareit.item.storage.ItemStorage;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
+import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.storage.UserRepository;
 import ru.practicum.shareit.user.storage.UserStorage;
 
 import java.util.ArrayList;
@@ -17,35 +20,29 @@ import java.util.stream.Collectors;
 
 @Service
 public class ItemServiceImpl implements ItemService {
-    private final ItemStorage itemStorage;
-    private final UserStorage userStorage;
+    private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public ItemServiceImpl(ItemStorage itemStorage, UserStorage userStorage) {
-        this.itemStorage = itemStorage;
-        this.userStorage = userStorage;
+    public ItemServiceImpl(ItemRepository itemRepository, UserRepository userRepository) {
+        this.itemRepository = itemRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public ItemDto create(Long userId, ItemDto itemDto) {
-        Item item = ItemMapper.toItem(itemDto);
-        if (userStorage.getUserById(userId) == null) {
-            throw new UserNotFoundException("User not found");
-        }
-        item.setOwner(userStorage.getUserById(userId));
-        itemStorage.create(item);
-        return ItemMapper.toItemDto(item);
+    public Item create(Long userId, Item item) {
+        item.setOwner(userRepository.findById(userId).orElseThrow(()->new UserNotFoundException("user not found")));
+        return itemRepository.save(item);
     }
 
     @Override
     public ItemDto update(long userId, Long itemId, ItemDto itemDto) {
+        User owner = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException("user not found"));
         // нельзя изменить вещь, если ее нет в хранилище  или нет такого пользователя или вещь чужая
-        if (userStorage.getUserById(userId) == null
-                || itemStorage.getItemById(itemId) == null
-                || !itemStorage.getItemById(itemId).getOwner().getId().equals(userId)) {
+        if (!owner.equals(itemRepository.findById(itemId).get().getOwner())) {
             throw new UserIsNotOwnerException("Вы пытаетесь изменить чужую вещь");
         }
-        Item item = itemStorage.getItemById(itemId);
+        Item item = itemRepository.findById(itemId).get();
         if (itemDto.getName() != null) {
             item.setName(itemDto.getName());
         }
@@ -55,33 +52,26 @@ public class ItemServiceImpl implements ItemService {
         if (itemDto.getAvailable() != null) {
             item.setAvailable(itemDto.getAvailable());
         }
-        if (itemDto.getRequest() != null) {
-            item.setRequest(itemDto.getRequest());
-        }
-        itemStorage.update(item);
+//        if (itemDto.getRequest() != null) {
+//            item.setRequest(itemDto.getRequest());
+//        }
+        itemRepository.save(item);
         return ItemMapper.toItemDto(item);
     }
 
     @Override
-    public ItemDto getItemById(Long itemId) {
-        Item item = itemStorage.getItemById(itemId);
-        return ItemMapper.toItemDto(item);
+    public Item getItemById(Long itemId) {
+        return itemRepository.findById(itemId).get();
     }
 
     @Override
-    public List<ItemDto> getAllItemsByUser(long userId) {
-        if (userStorage.getUserById(userId) == null) {
-            throw new UserNotFoundException("Нет такого юзера");
-        }
-        return itemStorage.getAllItems()
-                .stream()
-                .filter(item -> item.getOwner().getId().equals(userId))
-                .map(ItemMapper::toItemDto)
-                .collect(Collectors.toList());
+    public List<Item> getAllItemsByUser(long userId) {
+        User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
+        return itemRepository.findByOwner(owner);
     }
 
     @Override
-    public List<ItemDto> search(String text) {
+    public List<Item> search(String text) {
         if (text.equals("")) {
             return new ArrayList<>();
         }
@@ -90,11 +80,10 @@ public class ItemServiceImpl implements ItemService {
         Predicate<Item> inName = item -> item.getName().toLowerCase().contains(text.toLowerCase());
         Predicate<Item> inDesc = item -> item.getDescription().toLowerCase().contains(text.toLowerCase());
 
-        return itemStorage.getAllItems()
+        return itemRepository.findAll()
                 .stream()
                 .filter(inName.or(inDesc))
                 .filter(Item::isAvailable)
-                .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
     }
 }
