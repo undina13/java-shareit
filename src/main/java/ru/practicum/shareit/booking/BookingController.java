@@ -68,6 +68,7 @@ public class BookingController {
     List< BookingDtoState> getBookingCurrentOwner(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
                                                  @RequestParam(defaultValue = "ALL")String state) {
         log.info("get booking current owner id ={}", userId);
+
         State stateEnum = ValidateState.validateStatus(state);
         return bookingService.getBookingCurrentOwner(userId)
                 .stream()

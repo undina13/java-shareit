@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemForOwnerDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
@@ -54,18 +55,21 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    ItemDto getItemById(@PathVariable long itemId) {
+    ItemForOwnerDto getItemById(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
+                        @PathVariable long itemId) {
         log.info("get item id={}", itemId);
-        return ItemMapper.toItemDto(itemService.getItemById(itemId));
+       Item item= itemService.getItemById(itemId);
+        if(userId==item.getOwner().getId()){
+            return itemService.setLastAndNextBookingDate(item);
+        }
+        else return ItemMapper.toItemForOwnerDto(item);
     }
 
     @GetMapping()
-    List<ItemDto> getAllItemsByUser(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId) {
+    List<ItemForOwnerDto> getAllItemsByUser(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId) {
         log.info("get all items from user id={}", userId);
-        return itemService.getAllItemsByUser(userId)
-                .stream()
-                .map(item -> ItemMapper.toItemDto(item))
-                .collect(Collectors.toList());
+        return itemService.getAllItemsByUser(userId);
+
     }
 
     @GetMapping("search")
