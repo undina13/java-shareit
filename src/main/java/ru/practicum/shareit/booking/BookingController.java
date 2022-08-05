@@ -3,19 +3,15 @@ package ru.practicum.shareit.booking;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoState;
 import ru.practicum.shareit.booking.dto.BookingDtoToUser;
 import ru.practicum.shareit.booking.exception.BookingDtoBadStateException;
-import ru.practicum.shareit.booking.exception.BookingNotFoundException;
 import ru.practicum.shareit.booking.exception.ErrorResponse;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.item.ItemMapper;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.booking.validation.ValidateState;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -59,14 +55,7 @@ public class BookingController {
     List<BookingDtoState> getBookingCurrentUser(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
                                                  @RequestParam(defaultValue = "ALL")String state) {
         log.info("get booking current user id ={}", userId);
-        State stateEnum;
-        try {
-            stateEnum = State.valueOf(state.toUpperCase());
-        }
-        catch (IllegalArgumentException e){
-            throw new BookingDtoBadStateException( "Unknown state: UNSUPPORTED_STATUS");
-
-        }
+        State stateEnum = ValidateState.validateStatus(state);
         return bookingService.getBookingCurrentUser(userId)
                 .stream()
                 .map(BookingMapper::toBookingDtoState)
@@ -79,15 +68,7 @@ public class BookingController {
     List< BookingDtoState> getBookingCurrentOwner(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
                                                  @RequestParam(defaultValue = "ALL")String state) {
         log.info("get booking current owner id ={}", userId);
-        //пляски с бубном для прохождения тестов
-        State stateEnum;
-        try {
-            stateEnum = State.valueOf(state.toUpperCase());
-        }
-        catch (IllegalArgumentException e){
-            throw new BookingDtoBadStateException( "Unknown state: UNSUPPORTED_STATUS");
-
-        }
+        State stateEnum = ValidateState.validateStatus(state);
         return bookingService.getBookingCurrentOwner(userId)
                 .stream()
                 .map(BookingMapper::toBookingDtoState)
