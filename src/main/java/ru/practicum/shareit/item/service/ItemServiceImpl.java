@@ -2,12 +2,8 @@ package ru.practicum.shareit.item.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.BookingMapper;
-import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingForItem;
 import ru.practicum.shareit.booking.repositiory.BookingRepository;
-import ru.practicum.shareit.item.ItemMapper;
-import ru.practicum.shareit.item.dto.ItemForOwnerDto;
 import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.exception.UserIsNotOwnerException;
 import ru.practicum.shareit.item.model.Item;
@@ -16,13 +12,9 @@ import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.UserRepository;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -54,21 +46,14 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item getItemById( Long itemId) {
+    public Item getItemById(Long itemId) {
         return itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
-
     }
 
     @Override
-    public List<ItemForOwnerDto> getAllItemsByUser(long userId) {
+    public List<Item> getAllItemsByUser(long userId) {
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-
-       List<ItemForOwnerDto>items = itemRepository.findByOwner(owner)
-               .stream()
-               .map(this::setLastAndNextBookingDate)
-              .sorted(Comparator.comparing(itemForOwnerDto -> itemForOwnerDto.getId()))
-               .collect(Collectors.toList());
-        return items;
+        return itemRepository.findByOwner(owner);
     }
 
     @Override
@@ -79,24 +64,21 @@ public class ItemServiceImpl implements ItemService {
         return itemRepository.search(text);
     }
 
-    public ItemForOwnerDto setLastAndNextBookingDate(Item item){
+    public List<BookingForItem> setLastAndNextBookingDate(Item item) {
         List<BookingForItem> bookings = bookingRepository.findAllByItem(item);
-        ItemForOwnerDto itemForOwnerDto = ItemMapper.toItemForOwnerDto(item);
         BookingForItem last = bookings.stream()
                 .filter(booking -> booking.getStart().isBefore(LocalDateTime.now()))
                 .max((booking, booking1) -> booking1.getStart().compareTo(booking.getStart()))
-             .orElse(null);
+                .orElse(null);
 
         BookingForItem next = bookings.stream()
                 .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
                 .min((booking, booking1) -> booking.getStart().compareTo(booking1.getStart()))
                 .orElse(null);
-if(last!=null) {
-    itemForOwnerDto.setLastBooking(BookingMapper.toBookingDtoItem(last));
-}
-if(next!=null) {
-    itemForOwnerDto.setNextBooking(BookingMapper.toBookingDtoItem(next));
-}
-        return itemForOwnerDto;
+
+        ArrayList<BookingForItem> bookingsList = new ArrayList<>();
+        bookingsList.add(last);
+        bookingsList.add(next);
+        return bookingsList;
     }
 }
