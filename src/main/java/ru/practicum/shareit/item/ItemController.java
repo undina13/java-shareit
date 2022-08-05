@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.model.BookingForItem;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
@@ -61,10 +62,13 @@ public class ItemController {
                         @PathVariable long itemId) {
         log.info("get item id={}", itemId);
         Item item = itemService.getItemById(itemId);
+        ItemDto itemdto;
         if (userId == item.getOwner().getId()) {
             List<BookingForItem> bookings = itemService.setLastAndNextBookingDate(item);
-            return createItemDtoBooking(item, bookings);
-        } else return ItemMapper.toItemDto(item);
+            itemdto= createItemDtoBooking(item, bookings);
+            return setComments(itemdto);
+        }
+        return setComments(ItemMapper.toItemDto(item));
     }
 
     @GetMapping()
@@ -72,8 +76,9 @@ public class ItemController {
         log.info("get all items from user id={}", userId);
         List<ItemDto> items = itemService.getAllItemsByUser(userId)
                 .stream()
-                .sorted(Comparator.comparing(item -> item.getId()))
+                .sorted(Comparator.comparing(Item::getId))
                 .map(item -> createItemDtoBooking(item, itemService.setLastAndNextBookingDate(item)))
+                .map(this::setComments)
                 .collect(Collectors.toList());
         return items;
 
@@ -88,6 +93,15 @@ public class ItemController {
                 .collect(Collectors.toList());
     }
 
+    @PostMapping("/{itemId}/comment")
+    CommentDto createComment(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
+                             @PathVariable long itemId,
+                      @RequestBody @Valid CommentDto commentDto) {
+        log.info("create comment");
+
+        return CommentMapper.toCommentDto(itemService.createComment(userId, itemId, CommentMapper.toComment(commentDto)));
+    }
+
     public ItemDto createItemDtoBooking(Item item, List<BookingForItem> bookings) {
         ItemDto itemDto = ItemMapper.toItemDto(item);
         if (bookings.get(0) != null) {
@@ -97,6 +111,15 @@ public class ItemController {
             itemDto.setNextBooking(BookingMapper.toBookingDtoItem(bookings.get(1)));
         }
         return itemDto;
+    }
+
+    public ItemDto setComments(ItemDto itemdto){
+        List<CommentDto>comments = itemService.findCommentsByItem(itemdto.getId())
+                .stream()
+                .map(CommentMapper::toCommentDto)
+                .collect(Collectors.toList());
+        itemdto.setComments(comments);
+        return itemdto;
     }
 }
 
