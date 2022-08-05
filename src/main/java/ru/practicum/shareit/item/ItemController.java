@@ -36,7 +36,21 @@ public class ItemController {
                    @PathVariable long itemId,
                    @RequestBody ItemDto itemDto) {
         log.info("update item id={}", itemId);
-        return itemService.update(userId, itemId, itemDto);
+        Item item = itemService.getItemById(itemId);
+        if (itemDto.getName() != null) {
+            item.setName(itemDto.getName());
+        }
+        if (itemDto.getDescription() != null) {
+            item.setDescription(itemDto.getDescription());
+        }
+        if (itemDto.getAvailable() != null) {
+            item.setAvailable(itemDto.getAvailable());
+        }
+        if (itemDto.getRequest() != null) {
+            item.setRequest(itemDto.getRequest());
+        }
+        itemService.update(userId, itemId, item);
+        return ItemMapper.toItemDto(item);
     }
 
     @GetMapping("/{itemId}")
@@ -59,7 +73,7 @@ public class ItemController {
         log.info("search text={}", text);
         return itemService.search(text)
                 .stream()
-                .map(item -> ItemMapper.toItemDto(item))
+                .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
     }
 }
