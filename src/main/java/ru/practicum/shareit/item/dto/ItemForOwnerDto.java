@@ -5,7 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookingDtoItem;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.BookingForItem;
 import ru.practicum.shareit.requests.model.ItemRequest;
 
 import javax.validation.constraints.NotEmpty;
@@ -30,7 +32,7 @@ public class ItemForOwnerDto {
 
     ItemRequest request;
 
-    Booking nextBooking;
+    BookingDtoItem nextBooking;
 
-    Booking lastBooking;
+    BookingDtoItem lastBooking;
 }

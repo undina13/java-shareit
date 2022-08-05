@@ -2,7 +2,9 @@ package ru.practicum.shareit.item.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.BookingForItem;
 import ru.practicum.shareit.booking.repositiory.BookingRepository;
 import ru.practicum.shareit.item.ItemMapper;
 import ru.practicum.shareit.item.dto.ItemForOwnerDto;
@@ -64,6 +66,7 @@ public class ItemServiceImpl implements ItemService {
        List<ItemForOwnerDto>items = itemRepository.findByOwner(owner)
                .stream()
                .map(this::setLastAndNextBookingDate)
+              .sorted(Comparator.comparing(itemForOwnerDto -> itemForOwnerDto.getId()))
                .collect(Collectors.toList());
         return items;
     }
@@ -77,21 +80,23 @@ public class ItemServiceImpl implements ItemService {
     }
 
     public ItemForOwnerDto setLastAndNextBookingDate(Item item){
-        List<Booking> bookings = bookingRepository.findAllByItem(item);
+        List<BookingForItem> bookings = bookingRepository.findAllByItem(item);
         ItemForOwnerDto itemForOwnerDto = ItemMapper.toItemForOwnerDto(item);
-        Booking last = bookings.stream()
+        BookingForItem last = bookings.stream()
                 .filter(booking -> booking.getStart().isBefore(LocalDateTime.now()))
                 .max((booking, booking1) -> booking1.getStart().compareTo(booking.getStart()))
-                .orElse(null)
-                ;
+             .orElse(null);
 
-        Booking next = bookings.stream()
+        BookingForItem next = bookings.stream()
                 .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
                 .min((booking, booking1) -> booking.getStart().compareTo(booking1.getStart()))
-                .orElse(null)
-                ;
-        itemForOwnerDto.setLastBooking(last);
-        itemForOwnerDto.setNextBooking(next);
+                .orElse(null);
+if(last!=null) {
+    itemForOwnerDto.setLastBooking(BookingMapper.toBookingDtoItem(last));
+}
+if(next!=null) {
+    itemForOwnerDto.setNextBooking(BookingMapper.toBookingDtoItem(next));
+}
         return itemForOwnerDto;
     }
 }
