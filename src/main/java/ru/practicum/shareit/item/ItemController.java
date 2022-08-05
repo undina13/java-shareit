@@ -65,7 +65,7 @@ public class ItemController {
         ItemDto itemdto;
         if (userId == item.getOwner().getId()) {
             List<BookingForItem> bookings = itemService.setLastAndNextBookingDate(item);
-            itemdto= createItemDtoBooking(item, bookings);
+            itemdto = createItemDtoBooking(item, bookings);
             return setComments(itemdto);
         }
         return setComments(ItemMapper.toItemDto(item));
@@ -96,10 +96,11 @@ public class ItemController {
     @PostMapping("/{itemId}/comment")
     CommentDto createComment(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
                              @PathVariable long itemId,
-                      @RequestBody @Valid CommentDto commentDto) {
+                             @RequestBody @Valid CommentDto commentDto) {
         log.info("create comment");
 
-        return CommentMapper.toCommentDto(itemService.createComment(userId, itemId, CommentMapper.toComment(commentDto)));
+        return CommentMapper
+                .toCommentDto(itemService.createComment(userId, itemId, CommentMapper.toComment(commentDto)));
     }
 
     public ItemDto createItemDtoBooking(Item item, List<BookingForItem> bookings) {
@@ -113,8 +114,8 @@ public class ItemController {
         return itemDto;
     }
 
-    public ItemDto setComments(ItemDto itemdto){
-        List<CommentDto>comments = itemService.findCommentsByItem(itemdto.getId())
+    public ItemDto setComments(ItemDto itemdto) {
+        List<CommentDto> comments = itemService.findCommentsByItem(itemdto.getId())
                 .stream()
                 .map(CommentMapper::toCommentDto)
                 .collect(Collectors.toList());

@@ -10,10 +10,10 @@ import ru.practicum.shareit.item.exception.ItemNotAvalibleException;
 import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.exception.UserIsNotOwnerException;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.storage.ItemRepository;
+import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.storage.UserRepository;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.List;
 
@@ -30,12 +30,12 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Booking create(long userId, long itemId,  Booking booking) {
-        Item item = itemRepository.findById(itemId).orElseThrow(()-> new ItemNotFoundException("item not found"));
-        if (!(item.getAvailable())){
+    public Booking create(long userId, long itemId, Booking booking) {
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
+        if (!(item.getAvailable())) {
             throw new ItemNotAvalibleException("item not availible");
         }
-        if(item.getOwner().getId()==userId){
+        if (item.getOwner().getId() == userId) {
             throw new UserIsNotOwnerException("you can not booking this item");
         }
         booking.setItem(item);
@@ -49,7 +49,7 @@ public class BookingServiceImpl implements BookingService {
     public Booking approveStatus(long userId, long bookingId, boolean approved) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new BookingNotFoundException("booking not found"));
-        if(!(booking.getStatus().equals(Status.WAITING))){
+        if (!(booking.getStatus().equals(Status.WAITING))) {
             throw new BookingNotChangeStatusException("status can not be change");
         }
         if (userId != booking.getItem().getOwner().getId()) {

@@ -7,10 +7,12 @@ import java.time.LocalDateTime;
 
 public interface BookingForItem {
     long getId();
+
     LocalDateTime getStart();
+
     LocalDateTime getEnd();
+
     Item getItem();
+
     User getBooker();
-
-
 }

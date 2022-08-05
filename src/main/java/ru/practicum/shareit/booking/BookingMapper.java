@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 @UtilityClass
 public class BookingMapper {
-    public static BookingDto toBookingDto(Booking booking){
+    public static BookingDto toBookingDto(Booking booking) {
         return BookingDto.builder()
                 .id(booking.getId())
                 .start(booking.getStart())
@@ -26,7 +26,7 @@ public class BookingMapper {
                 .build();
     }
 
-    public static Booking toBooking(BookingDto bookingDto){
+    public static Booking toBooking(BookingDto bookingDto) {
         return Booking.builder()
                 .id(bookingDto.getId())
                 .start(bookingDto.getStart())
@@ -37,23 +37,23 @@ public class BookingMapper {
                 .build();
     }
 
-    public static BookingDtoState toBookingDtoState(Booking booking){
+    public static BookingDtoState toBookingDtoState(Booking booking) {
         ArrayList<State> states = new ArrayList<>();
         states.add(State.ALL);
-        if (booking.getStatus().equals(Status.WAITING)){
+        if (booking.getStatus().equals(Status.WAITING)) {
             states.add(State.WAITING);
         }
-         if(booking.getStatus().equals(Status.REJECTED)){
+        if (booking.getStatus().equals(Status.REJECTED)) {
             states.add(State.REJECTED);
         }
-          if(booking.getEnd().isBefore(LocalDateTime.now())){
+        if (booking.getEnd().isBefore(LocalDateTime.now())) {
             states.add(State.PAST);
         }
-        if(booking.getStart().isAfter(LocalDateTime.now())){
+        if (booking.getStart().isAfter(LocalDateTime.now())) {
             states.add(State.FUTURE);
         }
-         if(booking.getStart().isBefore(LocalDateTime.now()) && booking.getEnd().isAfter(LocalDateTime.now())){
-             states.add(State.CURRENT);
+        if (booking.getStart().isBefore(LocalDateTime.now()) && booking.getEnd().isAfter(LocalDateTime.now())) {
+            states.add(State.CURRENT);
         }
 
 
@@ -68,7 +68,7 @@ public class BookingMapper {
                 .build();
     }
 
-    public static BookingDtoToUser toBookingDtoToUser(Booking booking){
+    public static BookingDtoToUser toBookingDtoToUser(Booking booking) {
         return BookingDtoToUser.builder()
                 .id(booking.getId())
                 .start(booking.getStart())
@@ -79,7 +79,7 @@ public class BookingMapper {
                 .build();
     }
 
-    public static BookingDtoItem toBookingDtoItem(BookingForItem bookingForItem){
+    public static BookingDtoItem toBookingDtoItem(BookingForItem bookingForItem) {
         return BookingDtoItem.builder()
                 .id(bookingForItem.getId())
                 .start(bookingForItem.getStart())

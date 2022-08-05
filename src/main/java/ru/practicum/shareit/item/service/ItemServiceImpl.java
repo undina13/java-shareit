@@ -9,11 +9,11 @@ import ru.practicum.shareit.item.exception.UserIsNotBookerException;
 import ru.practicum.shareit.item.exception.UserIsNotOwnerException;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.storage.CommentRepository;
-import ru.practicum.shareit.item.storage.ItemRepository;
+import ru.practicum.shareit.item.repository.CommentRepository;
+import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.storage.UserRepository;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -89,27 +89,27 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Comment createComment(long userId, long itemId, Comment comment) {
-        if(comment.getText().isEmpty()){
+        if (comment.getText().isEmpty()) {
             throw new UserIsNotBookerException("text is empty");
         }
-        Item item = itemRepository.findById(itemId).orElseThrow(()-> new ItemNotFoundException("item not found"));
-        List<BookingForItem>bookings = bookingRepository.findAllByItem(item);
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
+        List<BookingForItem> bookings = bookingRepository.findAllByItem(item);
         BookingForItem booking = bookings.stream()
-                .filter(bookingForItem -> bookingForItem.getBooker().getId()==userId)
+                .filter(bookingForItem -> bookingForItem.getBooker().getId() == userId)
                 .findAny()
-                .orElseThrow(()->new UserIsNotBookerException("user not booking this item"));
-        if(booking.getEnd().isAfter(LocalDateTime.now())){
+                .orElseThrow(() -> new UserIsNotBookerException("user not booking this item"));
+        if (booking.getEnd().isAfter(LocalDateTime.now())) {
             throw new UserIsNotBookerException("user do not end booking;");
         }
         comment.setItem(item);
         comment.setAuthor(userRepository.findById(userId)
-                .orElseThrow(()->new UserNotFoundException("user not found")));
+                .orElseThrow(() -> new UserNotFoundException("user not found")));
         return commentRepository.save(comment);
     }
 
     @Override
     public List<Comment> findCommentsByItem(long itemId) {
         return commentRepository.findCommentsByItem(itemRepository.findById(itemId)
-        .orElseThrow(()->new ItemNotFoundException("item not found")));
+                .orElseThrow(() -> new ItemNotFoundException("item not found")));
     }
 }

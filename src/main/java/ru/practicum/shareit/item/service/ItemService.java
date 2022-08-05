@@ -21,5 +21,5 @@ public interface ItemService {
 
     Comment createComment(long userId, long itemId, Comment comment);
 
-    List<Comment>findCommentsByItem(long itemId);
+    List<Comment> findCommentsByItem(long itemId);
 }

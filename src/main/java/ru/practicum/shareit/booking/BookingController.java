@@ -39,21 +39,21 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     BookingDtoToUser approveStatus(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
-                             @PathVariable Long bookingId,
-                             @RequestParam boolean approved){
+                                   @PathVariable Long bookingId,
+                                   @RequestParam boolean approved) {
         return BookingMapper.toBookingDtoToUser(bookingService.approveStatus(userId, bookingId, approved));
     }
 
     @GetMapping("/{bookingId}")
     BookingDtoToUser getBookingById(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
-                           @PathVariable long bookingId) {
+                                    @PathVariable long bookingId) {
         log.info("get booking id={}", bookingId);
         return BookingMapper.toBookingDtoToUser(bookingService.getBookingById(userId, bookingId));
     }
 
     @GetMapping()
     List<BookingDtoState> getBookingCurrentUser(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
-                                                 @RequestParam(defaultValue = "ALL")String state) {
+                                                @RequestParam(defaultValue = "ALL") String state) {
         log.info("get booking current user id ={}", userId);
         State stateEnum = ValidateState.validateStatus(state);
         return bookingService.getBookingCurrentUser(userId)
@@ -65,10 +65,9 @@ public class BookingController {
     }
 
     @GetMapping("/owner")
-    List< BookingDtoState> getBookingCurrentOwner(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
-                                                 @RequestParam(defaultValue = "ALL")String state) {
+    List<BookingDtoState> getBookingCurrentOwner(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
+                                                 @RequestParam(defaultValue = "ALL") String state) {
         log.info("get booking current owner id ={}", userId);
-
         State stateEnum = ValidateState.validateStatus(state);
         return bookingService.getBookingCurrentOwner(userId)
                 .stream()
