@@ -31,5 +31,4 @@ public class Comment {
     private User author;
 
     private LocalDateTime created;
-
 }

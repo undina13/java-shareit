@@ -56,7 +56,6 @@ public class BookingMapper {
             states.add(State.CURRENT);
         }
 
-
         return BookingDtoState.builder()
                 .id(booking.getId())
                 .start(booking.getStart())

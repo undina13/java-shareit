@@ -15,7 +15,6 @@ public class ValidateState {
             stateEnum = State.valueOf(text.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new BookingDtoBadStateException("Unknown state: UNSUPPORTED_STATUS");
-
         }
         return stateEnum;
     }
