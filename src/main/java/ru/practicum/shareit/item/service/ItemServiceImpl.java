@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.model.BookingForItem;
 import ru.practicum.shareit.booking.repositiory.BookingRepository;
 import ru.practicum.shareit.item.exception.ItemNotFoundException;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
@@ -35,12 +37,14 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public Item create(Long userId, Item item) {
         item.setOwner(userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found")));
         return itemRepository.save(item);
     }
 
     @Override
+    @Transactional
     public Item update(long userId, Long itemId, Item item) {
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         // нельзя изменить вещь, если ее нет в хранилище  или нет такого пользователя или вещь чужая
@@ -88,6 +92,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public Comment createComment(long userId, long itemId, Comment comment) {
         if (comment.getText().isEmpty()) {
             throw new UserIsNotBookerException("text is empty");
