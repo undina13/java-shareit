@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.requests.ItemRequest;
+import ru.practicum.shareit.booking.dto.BookingDtoItem;
+import ru.practicum.shareit.requests.model.ItemRequest;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @Builder
@@ -26,4 +28,10 @@ public class ItemDto {
     Boolean available;
 
     ItemRequest request;
+
+    BookingDtoItem nextBooking;
+
+    BookingDtoItem lastBooking;
+
+    List<CommentDto> comments;
 }
