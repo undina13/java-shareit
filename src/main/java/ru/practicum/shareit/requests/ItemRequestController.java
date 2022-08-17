@@ -2,11 +2,9 @@ package ru.practicum.shareit.requests;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.dto.RequestDto;
-import ru.practicum.shareit.requests.model.ItemRequest;
 import ru.practicum.shareit.requests.service.ItemRequestService;
 
 import javax.validation.Valid;
@@ -39,16 +37,16 @@ public class ItemRequestController {
     }
 
     @GetMapping("/all")
-    Page<ItemRequest> getAll(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
-                             @RequestParam(defaultValue = "0") @Min(1) int from,
-                             @RequestParam(defaultValue = "30") int size){
+    List<ItemRequestDto> getAll(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
+                                @RequestParam(defaultValue = "0") @Min(1) int from,
+                                @RequestParam(defaultValue = "30") int size) {
         log.info("get requests all");
         return itemRequestService.getAll(userId, from, size);
     }
 
-    @GetMapping("/{requestId}" )
+    @GetMapping("/{requestId}")
     ItemRequestDto getById(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
-                           @PathVariable long requestId){
+                           @PathVariable long requestId) {
         log.info("get request id = {}", requestId);
         return itemRequestService.getById(userId, requestId);
     }

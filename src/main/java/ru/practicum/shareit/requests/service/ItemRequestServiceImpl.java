@@ -59,9 +59,12 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    public Page<ItemRequest> getAll(long userId, int from, int size) {
+    public List<ItemRequestDto> getAll(long userId, int from, int size) {
         User user = checkUser(userId);
-        return itemRequestRepository.findAllByRequestorIsNot(user, PageRequest.of( from, size));
+        return itemRequestRepository.findAllByRequestorIsNot(user, PageRequest.of( from, size))
+                .stream()
+                .map(itemRequest -> createItemRequestDto(itemRequest))
+                .collect(Collectors.toList());
     }
 
     @Override
