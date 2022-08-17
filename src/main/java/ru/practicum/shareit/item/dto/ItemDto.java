@@ -27,7 +27,7 @@ public class ItemDto {
     @NotNull
     Boolean available;
 
-    ItemRequest request;
+    Long requestId;
 
     BookingDtoItem nextBooking;
 

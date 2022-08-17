@@ -1,0 +1,39 @@
+package ru.practicum.shareit.requests;
+
+import lombok.experimental.UtilityClass;
+import ru.practicum.shareit.item.dto.ItemDtoForRequest;
+import ru.practicum.shareit.requests.dto.ItemRequestDto;
+import ru.practicum.shareit.requests.dto.RequestDto;
+import ru.practicum.shareit.requests.model.ItemRequest;
+
+import java.util.List;
+
+@UtilityClass
+public class ItemRequestMapper {
+    public static RequestDto toRequestDto(ItemRequest itemRequest) {
+        return RequestDto.builder()
+                .id(itemRequest.getId())
+                .description(itemRequest.getDescription())
+                .requestorId(itemRequest.getRequestor().getId())
+                .created(itemRequest.getCreated())
+                .build();
+    }
+
+    public static ItemRequest toItemRequest(RequestDto itemRequestDto) {
+        return ItemRequest.builder()
+                .id(itemRequestDto.getId())
+                .description(itemRequestDto.getDescription())
+                //               .requestor(itemRequestDto.getRequestorId())
+                .created(itemRequestDto.getCreated())
+                .build();
+    }
+
+    public static ItemRequestDto toItemRequestDto(ItemRequest itemRequest, List<ItemDtoForRequest> items) {
+        return ItemRequestDto.builder()
+                .id(itemRequest.getId())
+                .description(itemRequest.getDescription())
+                .created(itemRequest.getCreated())
+                .items(items)
+                .build();
+    }
+}
