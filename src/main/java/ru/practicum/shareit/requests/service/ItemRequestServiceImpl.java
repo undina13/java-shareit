@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.item.ItemMapper;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoForRequest;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.requests.ItemRequestMapper;
@@ -72,10 +73,10 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     public ItemRequestDto createItemRequestDto(ItemRequest itemRequest) {
-        List<ItemDtoForRequest> items = itemRepository
+        List<ItemDto> items = itemRepository
                 .findByRequest(itemRequest)
                 .stream()
-                .map(ItemMapper::toItemDtoForRequest)
+                .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
         return ItemRequestMapper.toItemRequestDto(itemRequest, items);
     }
