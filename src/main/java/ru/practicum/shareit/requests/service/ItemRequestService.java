@@ -14,5 +14,5 @@ public interface ItemRequestService {
 
     Page<ItemRequest> getAll(long userId, int from, int size);
 
-    ItemRequestDto getById(long requestId);
+    ItemRequestDto getById(long userId, long requestId);
 }

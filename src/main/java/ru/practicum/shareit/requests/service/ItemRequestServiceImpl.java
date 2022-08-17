@@ -42,15 +42,14 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public RequestDto create(long userId, RequestDto itemRequestDto) {
         ItemRequest itemRequest = ItemRequestMapper.toItemRequest(itemRequestDto);
-        itemRequest.setRequestor(userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("user not found")));
+        itemRequest.setRequestor(checkUser(userId));
         itemRequest.setCreated(LocalDateTime.now());
         return ItemRequestMapper.toRequestDto(itemRequestRepository.save(itemRequest));
     }
 
     @Override
     public List<ItemRequestDto> getByRequestor(long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
+        User user = checkUser(userId);
         List<ItemRequest> requests = itemRequestRepository.findByRequestorOrderByCreatedDesc(user);
         List<ItemRequestDto> itemRequestDtoList = new ArrayList<>();
         for (ItemRequest itemRequest:requests) {
@@ -61,12 +60,13 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public Page<ItemRequest> getAll(long userId, int from, int size) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
+        User user = checkUser(userId);
         return itemRequestRepository.findAllByRequestorIsNot(user, PageRequest.of( from, size));
     }
 
     @Override
-    public ItemRequestDto getById(long requestId) {
+    public ItemRequestDto getById(long userId,long requestId) {
+       checkUser(userId);
         ItemRequest itemRequest= itemRequestRepository.findById(requestId)
                 .orElseThrow(()-> new ItemRequestNotFoundException("ItemRequest not found"));
         return createItemRequestDto(itemRequest);
@@ -79,5 +79,9 @@ public class ItemRequestServiceImpl implements ItemRequestService {
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
         return ItemRequestMapper.toItemRequestDto(itemRequest, items);
+    }
+
+    public User checkUser(long userId){
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
     }
 }
