@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.dto.RequestDto;
+import ru.practicum.shareit.requests.exception.ItemRequestNotGoodParametrsException;
 import ru.practicum.shareit.requests.service.ItemRequestService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
@@ -38,9 +38,12 @@ public class ItemRequestController {
 
     @GetMapping("/all")
     List<ItemRequestDto> getAll(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
-                                @RequestParam(defaultValue = "0") @Min(1) int from,
-                                @RequestParam(defaultValue = "30") int size) {
+                                @Valid @RequestParam(defaultValue = "1") int from,
+                                @RequestParam(defaultValue = "10") int size) {
         log.info("get requests all");
+        if (from < 0) {
+            throw new ItemRequestNotGoodParametrsException("from < 0");
+        }
         return itemRequestService.getAll(userId, from, size);
     }
 

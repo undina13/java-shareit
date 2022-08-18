@@ -1,14 +1,13 @@
 package ru.practicum.shareit.requests.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.item.ItemMapper;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDtoForRequest;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.requests.ItemRequestMapper;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
@@ -39,6 +38,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         this.itemRepository = itemRepository;
     }
 
+    @Transactional
     @Override
     public RequestDto create(long userId, RequestDto itemRequestDto) {
         ItemRequest itemRequest = ItemRequestMapper.toItemRequest(itemRequestDto);
@@ -52,7 +52,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         User user = checkUser(userId);
         List<ItemRequest> requests = itemRequestRepository.findByRequestorOrderByCreatedDesc(user);
         List<ItemRequestDto> itemRequestDtoList = new ArrayList<>();
-        for (ItemRequest itemRequest:requests) {
+        for (ItemRequest itemRequest : requests) {
             itemRequestDtoList.add(createItemRequestDto(itemRequest));
         }
         return itemRequestDtoList;
@@ -61,17 +61,18 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public List<ItemRequestDto> getAll(long userId, int from, int size) {
         User user = checkUser(userId);
-        return itemRequestRepository.findAllByRequestorIsNot(user, PageRequest.of( from, size))
+        return itemRequestRepository.findAllByRequestorIsNot(user, PageRequest
+                .of(from / size, size, Sort.by(Sort.Direction.DESC, "created")))
                 .stream()
-                .map(itemRequest -> createItemRequestDto(itemRequest))
+                .map(this::createItemRequestDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ItemRequestDto getById(long userId,long requestId) {
-       checkUser(userId);
-        ItemRequest itemRequest= itemRequestRepository.findById(requestId)
-                .orElseThrow(()-> new ItemRequestNotFoundException("ItemRequest not found"));
+    public ItemRequestDto getById(long userId, long requestId) {
+        checkUser(userId);
+        ItemRequest itemRequest = itemRequestRepository.findById(requestId)
+                .orElseThrow(() -> new ItemRequestNotFoundException("ItemRequest not found"));
         return createItemRequestDto(itemRequest);
     }
 
@@ -84,7 +85,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         return ItemRequestMapper.toItemRequestDto(itemRequest, items);
     }
 
-    public User checkUser(long userId){
+    public User checkUser(long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
     }
 }

@@ -46,19 +46,20 @@ public class ItemController {
     }
 
     @GetMapping()
-    List<ItemDto> getAllItemsByUser(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId) {
+    List<ItemDto> getAllItemsByUser(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
+                                    @Valid @RequestParam(defaultValue = "1") int from,
+                                    @RequestParam(defaultValue = "10") int size) {
         log.info("get all items from user id={}", userId);
-        return itemService.getAllItemsByUser(userId);
+        return itemService.getAllItemsByUser(from, size, userId);
 
     }
 
     @GetMapping("search")
-    List<ItemDto> search(@RequestParam(required = false) String text) {
+    List<ItemDto> search(@RequestParam(required = false) String text,
+     @Valid @RequestParam(defaultValue = "1") int from,
+    @RequestParam(defaultValue = "10") int size) {
         log.info("search text={}", text);
-        return itemService.search(text)
-                .stream()
-                .map(ItemMapper::toItemDto)
-                .collect(Collectors.toList());
+        return itemService.search(from, size, text);
     }
 
     @PostMapping("/{itemId}/comment")

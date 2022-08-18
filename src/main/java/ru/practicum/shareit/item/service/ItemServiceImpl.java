@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.BookingMapper;
@@ -51,8 +52,9 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public ItemDto create(Long userId, ItemDto itemDto) {
         Item item = ItemMapper.toItem(itemDto);
-        if(itemDto.getRequestId()!= null){
-            item.setRequest(itemRequestRepository.findById(itemDto.getRequestId()).orElseThrow(()->new ItemRequestNotFoundException("ItemRequestNotFound")));
+        if (itemDto.getRequestId() != null) {
+            item.setRequest(itemRequestRepository.findById(itemDto.getRequestId())
+                    .orElseThrow(() -> new ItemRequestNotFoundException("ItemRequestNotFound")));
         }
         item.setOwner(userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found")));
         return ItemMapper.toItemDto(itemRepository.save(item));
@@ -94,9 +96,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> getAllItemsByUser(long userId) {
+    public List<ItemDto> getAllItemsByUser(int from, int size, long userId) {
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-        return itemRepository.findByOwner(owner)
+        return itemRepository.findByOwner(owner,  PageRequest.of(from / size, size))
                 .stream()
                 .sorted(Comparator.comparing(Item::getId))
                 .map(item -> setLastAndNextBookingDate(item, ItemMapper.toItemDto(item)))
@@ -105,11 +107,14 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> search(String text) {
+    public List<ItemDto> search(int from, int size, String text) {
         if (text.equals("")) {
             return new ArrayList<>();
         }
-        return itemRepository.search(text);
+        return itemRepository.search(text,  PageRequest.of(from / size, size))
+                .stream()
+                .map(ItemMapper::toItemDto)
+                .collect(Collectors.toList());
     }
 
     public ItemDto setLastAndNextBookingDate(Item item, ItemDto itemDto) {
