@@ -18,9 +18,9 @@ public class BookingDtoToUser {
 
     private Long id;
 
-    private LocalDateTime start;
+    private String start;
 
-    private LocalDateTime end;
+    private String end;
 
     private Item item;
 

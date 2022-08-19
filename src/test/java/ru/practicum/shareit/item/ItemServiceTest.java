@@ -10,6 +10,7 @@ import ru.practicum.shareit.booking.repositiory.BookingRepository;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.exception.ItemNotFoundException;
+import ru.practicum.shareit.item.exception.UserIsNotBookerException;
 import ru.practicum.shareit.item.service.ItemServiceImpl;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.service.UserServiceImpl;
@@ -67,6 +68,7 @@ public class ItemServiceTest {
         ItemDto itemDtoFromSQL = itemService.getItemById(2L, 2L);
         assertThat(itemDtoFromSQL, equalTo(itemDto2));
     }
+
     @Test
     void testGetItemByWrongId() {
         assertThrows(ItemNotFoundException.class, () -> itemService.getItemById(1L, 10L));
@@ -74,8 +76,8 @@ public class ItemServiceTest {
 
     @Test
     void testGetAllItemsByUser() {
-       List<ItemDto> items = itemService.getAllItemsByUser(1, 10, 1L);
-        assertThat(items, equalTo(List.of(itemDto1, itemDto2, itemDto3)));
+       List<ItemDto> items = itemService.getAllItemsByUser(1, 10, 2L);
+        assertThat(items, equalTo(List.of(itemDto4)));
     }
 
     @Test
@@ -92,6 +94,11 @@ public class ItemServiceTest {
     void testCreateComment() {
        CommentDto commentDto1 = itemService.createComment(2L, 1L, commentDto);
         assertThat(commentDto1, equalTo(commentDto));
+    }
+
+    @Test
+    void testCreateCommentNotBooker() {
+        assertThrows(UserIsNotBookerException.class, () -> itemService.createComment(3L, 1L, commentDto));
     }
 
 }

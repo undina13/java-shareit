@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.exception.NullEmailException;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -15,7 +16,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.practicum.shareit.user.UserTestDats.*;
+import static ru.practicum.shareit.user.UserTestData.*;
 
 @SpringBootTest
 @Transactional
@@ -30,15 +31,15 @@ public class UserServiceTest {
     void testCreate() {
         userService.create(userDtoCreated);
         List<UserDto> users = userService.getAllUsers();
-        assertThat(users.size(), equalTo(3));
-        assertThat(users, equalTo(List.of(userDto1, userDto2, userDtoCreated)));
+        assertThat(users.size(), equalTo(4));
+        assertThat(users, equalTo(List.of(userDto1, userDto2, userDto3, userDtoCreated)));
     }
 
     @Test
     void testGetAll() {
         List<UserDto> users = userService.getAllUsers();
-        assertThat(users.size(), equalTo(2));
-        assertThat(users, equalTo(List.of(userDto1, userDto2)));
+        assertThat(users.size(), equalTo(3));
+        assertThat(users, equalTo(List.of(userDto1, userDto2, userDto3)));
     }
 
     @Test
@@ -52,9 +53,18 @@ public class UserServiceTest {
 
     @Test
     @DirtiesContext
+    void testSaveUpdateUserEmail() {
+        userDto2.setEmail("User2new@mail.ru");
+        UserDto userDtoFromSQL = userService.update(2L, userDto2);
+        assertThat(userDtoFromSQL, equalTo(userDto2));
+        userDto2.setEmail("user2@mail.ru");
+    }
+
+    @Test
+    @DirtiesContext
     void testDeleteUser() {
         userService.delete(1L);
-        assertThat(userService.getAllUsers(), equalTo(List.of(userDto2)));
+        assertThat(userService.getAllUsers(), equalTo(List.of(userDto2, userDto3)));
     }
 
     @Test
@@ -68,4 +78,15 @@ public class UserServiceTest {
         assertThrows(UserNotFoundException.class, () -> userService.getUserById(100L));
     }
 
+    @Test
+    void testDeleteWrongId() {
+        assertThrows(UserNotFoundException.class, () -> userService.delete(100L));
+    }
+
+    @Test
+    void testCreateNullEmail() {
+        userDto2.setEmail(null);
+        assertThrows(NullEmailException.class, () -> userService.create(userDto2));
+        userDto2.setEmail("user2@mail.ru");
+    }
 }

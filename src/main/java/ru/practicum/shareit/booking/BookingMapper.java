@@ -11,6 +11,7 @@ import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.Status;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 @UtilityClass
@@ -70,8 +71,8 @@ public class BookingMapper {
     public static BookingDtoToUser toBookingDtoToUser(Booking booking) {
         return BookingDtoToUser.builder()
                 .id(booking.getId())
-                .start(booking.getStart())
-                .end(booking.getEnd())
+                .start(booking.getStart().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")))
+                .end(booking.getEnd().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")))
                 .item(booking.getItem())
                 .booker(booking.getBooker())
                 .status(booking.getStatus())
