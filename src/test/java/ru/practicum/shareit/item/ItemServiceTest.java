@@ -6,14 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.booking.repositiory.BookingRepository;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.exception.UserIsNotBookerException;
 import ru.practicum.shareit.item.service.ItemServiceImpl;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
-import ru.practicum.shareit.user.service.UserServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +41,7 @@ public class ItemServiceTest {
     @DirtiesContext
     void testUpdate() {
         itemDto1.setName("new name");
-        itemService.update(1l, 1L, itemDto1);
+        itemService.update(1L, 1L, itemDto1);
         ItemDto itemDtoFromSQL = itemService.getItemById(1L, 1L);
         assertThat(itemDtoFromSQL.getName(), equalTo(itemDto1.getName()));
         itemDto1.setName("item1");
@@ -51,10 +49,10 @@ public class ItemServiceTest {
 
     @Test
     void testUpdateWrongItem() {
-                itemDto1.setName("new name");
+        itemDto1.setName("new name");
         assertThrows(ItemNotFoundException.class, () -> itemService.update(1L, 50L, itemDto1));
         itemDto1.setName("item1");
-           }
+    }
 
     @Test
     void testUpdateWrongOwner() {
@@ -76,7 +74,7 @@ public class ItemServiceTest {
 
     @Test
     void testGetAllItemsByUser() {
-       List<ItemDto> items = itemService.getAllItemsByUser(1, 10, 2L);
+        List<ItemDto> items = itemService.getAllItemsByUser(1, 10, 2L);
         assertThat(items, equalTo(List.of(itemDto4)));
     }
 
@@ -92,7 +90,7 @@ public class ItemServiceTest {
     @Test
     @DirtiesContext
     void testCreateComment() {
-       CommentDto commentDto1 = itemService.createComment(2L, 1L, commentDto);
+        CommentDto commentDto1 = itemService.createComment(2L, 1L, commentDto);
         assertThat(commentDto1, equalTo(commentDto));
     }
 

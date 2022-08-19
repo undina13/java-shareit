@@ -6,6 +6,7 @@ import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.dto.RequestDto;
 import ru.practicum.shareit.requests.model.ItemRequest;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @UtilityClass
@@ -23,7 +24,6 @@ public class ItemRequestMapper {
         return ItemRequest.builder()
                 .id(itemRequestDto.getId())
                 .description(itemRequestDto.getDescription())
-                //               .requestor(itemRequestDto.getRequestorId())
                 .created(itemRequestDto.getCreated())
                 .build();
     }
@@ -32,7 +32,7 @@ public class ItemRequestMapper {
         return ItemRequestDto.builder()
                 .id(itemRequest.getId())
                 .description(itemRequest.getDescription())
-                .created(itemRequest.getCreated())
+                .created(itemRequest.getCreated().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")))
                 .items(items)
                 .build();
     }

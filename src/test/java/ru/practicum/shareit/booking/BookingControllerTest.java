@@ -8,11 +8,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.booking.service.BookingServiceImpl;
-import ru.practicum.shareit.item.ItemController;
-import ru.practicum.shareit.item.service.ItemServiceImpl;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -21,11 +18,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.practicum.shareit.booking.BookingTestData.*;
-import static ru.practicum.shareit.item.ItemTestData.*;
 
 @WebMvcTest(controllers = BookingController.class)
 public class BookingControllerTest {
-   @Autowired
+    @Autowired
     ObjectMapper mapper;
 
     @MockBean

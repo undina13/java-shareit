@@ -20,3 +20,6 @@ INSERT INTO PUBLIC.BOOKINGS(start_date, end_date, item_id, booker_id, status)
  VALUES ('2022-08-01T12:15','2022-08-10T12:15', 1, 2, 'APPROVED' );
 INSERT INTO PUBLIC.BOOKINGS(start_date, end_date, item_id, booker_id, status)
 VALUES ('2023-08-01T12:15','2023-08-10T12:15', 1, 2, 'WAITING' );
+
+INSERT INTO PUBLIC.REQUESTS(description, requestor_id, created)
+VALUES ('itemRequest1', 3, '2022-08-01T12:15');

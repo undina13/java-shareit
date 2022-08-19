@@ -13,7 +13,7 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Long> {
     Page<Item> findByOwner(User owner, Pageable pageable);
 
-    List<Item>findByRequest(ItemRequest itemRequest);
+    List<Item> findByRequest(ItemRequest itemRequest);
 
     @Query(" select i from Item i " +
             "where i.available = true and upper(i.name) like upper(concat('%', ?1, '%')) " +
