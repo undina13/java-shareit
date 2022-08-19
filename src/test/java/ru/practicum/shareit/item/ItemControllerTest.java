@@ -50,7 +50,6 @@ public class ItemControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(itemDto1)));
-
     }
 
     @Test
@@ -114,6 +113,20 @@ public class ItemControllerTest {
 
         itemDto1.setComments(new ArrayList<>());
     }
-//TODO создание комментов после букинга
+
+    @Test
+    void testCreateComment() throws Exception {
+        when(itemService.createComment(anyLong(), anyLong(), any()))
+                .thenReturn(commentDto);
+
+        mvc.perform(post("/items/1/comment")
+                .content(mapper.writeValueAsString(itemDto1))
+                .characterEncoding(StandardCharsets.UTF_8)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("X-Sharer-User-Id", 2L)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(commentDto)));
+    }
 
 }

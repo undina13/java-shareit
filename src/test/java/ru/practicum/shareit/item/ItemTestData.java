@@ -4,6 +4,7 @@ import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class ItemTestData {
@@ -24,5 +25,5 @@ public class ItemTestData {
             .comments(new ArrayList<>()).build();
 
     public static CommentDto commentDto = CommentDto.builder().id(1L).text("comment")
-            .created(LocalDateTime.now()).build();
+            .itemId(1L).authorName("user2").created(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE)).build();
 }

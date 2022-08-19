@@ -86,12 +86,12 @@ public class ItemServiceTest {
         assertThat(items, equalTo(List.of(itemDto1)));
         itemDto1.setComments(new ArrayList<>());
     }
-//
-//    @Test
-//    @DirtiesContext
-//    void testCreateComment() {
-//       CommentDto commentDto1 = itemService.createComment(2L, 1L, commentDto);
-//        assertThat(commentDto1, equalTo(commentDto));
-//    }
+
+    @Test
+    @DirtiesContext
+    void testCreateComment() {
+       CommentDto commentDto1 = itemService.createComment(2L, 1L, commentDto);
+        assertThat(commentDto1, equalTo(commentDto));
+    }
 
 }

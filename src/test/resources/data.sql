@@ -14,5 +14,5 @@ VALUES('item3', 'description3', false, 1, null);
 INSERT INTO PUBLIC.ITEMS(name, description, is_available, owner_id, request_id)
 VALUES('item4', 'description4', true, 2, null);
 
--- INSERT INTO PUBLIC.COMMENTS(text, item_id, author_id, created)
--- VALUES ('comment', 1, 2, CURRENT_DATE);
+INSERT INTO PUBLIC.BOOKINGS(start_date, end_date, item_id, booker_id, status)
+ VALUES (NOW() - 14, NOW() - 4, 1, 2, 'Status.APPROVED' )
