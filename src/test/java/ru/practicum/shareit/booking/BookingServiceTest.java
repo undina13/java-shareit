@@ -14,6 +14,7 @@ import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.service.BookingServiceImpl;
 import ru.practicum.shareit.item.exception.ItemNotAvalibleException;
+import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.exception.UserIsNotOwnerException;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 
@@ -40,8 +41,19 @@ public class BookingServiceTest {
     }
 
     @Test
+    void testGetBookingByIdTwo() {
+        BookingDtoToUser bookingDtoFromSQL = bookingService.getBookingById(1L, 1L);
+        assertThat(bookingDtoFromSQL, equalTo(bookingDtoToUser1));
+    }
+
+    @Test
     void testGetBookingByIdNotBookerOrOwner() {
         assertThrows(UserIsNotOwnerException.class, () -> bookingService.getBookingById(3L, 1L));
+    }
+
+    @Test
+    void testGetBookingByIdNotFound() {
+        assertThrows(BookingNotFoundException.class, () -> bookingService.getBookingById(3L, 10L));
     }
 
     @Test
@@ -55,6 +67,11 @@ public class BookingServiceTest {
     @Test
     void testCreateNotAvailable() {
         assertThrows(ItemNotAvalibleException.class, () -> bookingService.create(2L, 3L, createdDto));
+    }
+
+    @Test
+    void testCreateWrongItem() {
+        assertThrows(ItemNotFoundException.class, () -> bookingService.create(2L, 300L, createdDto));
     }
 
     @Test
@@ -104,9 +121,22 @@ public class BookingServiceTest {
     }
 
     @Test
+    void testGetBookingWrongCurrentUser() {
+        assertThrows(UserNotFoundException.class, () -> bookingService
+                .getBookingCurrentUser(200L, State.PAST, 0, 10));
+    }
+
+    @Test
     void testGetBookingCurrentOwner() {
         List<BookingDtoState> bookings = bookingService.getBookingCurrentOwner(1L, State.PAST, 0, 10);
         assertThat(bookings, equalTo(List.of(bookingDtoState)));
+    }
+
+    @Test
+    void testGetBookingWrongCurrentOwner() {
+        assertThrows(UserNotFoundException.class, () -> bookingService
+                .getBookingCurrentOwner(100L, State.PAST, 0, 10));
+
     }
 }
 

@@ -103,6 +103,7 @@
 					<version>3.1.2</version>
 					<configuration>
 						<configLocation>checkstyle.xml</configLocation>
+
 						<failOnViolation>true</failOnViolation>
 						<logViolationsToConsole>true</logViolationsToConsole>
 						<includeTestSourceDirectory>true</includeTestSourceDirectory>
@@ -145,6 +146,29 @@
 					<version>0.8.8</version>
 					<configuration>
 						<output>file</output>
+<!--						<excludes>-->
+<!--							<exclude>ru.practicum.shareit.booking.dto.BookingDtoItem</exclude>-->
+<!--							<exclude>ru.practicum.shareit.booking.dto.BookingDto</exclude>-->
+<!--							<exclude>ru.practicum.shareit.booking.dto.BookingDtoState</exclude>-->
+<!--							<exclude>ru.practicum.shareit.booking.dto.BookingDtoToUser</exclude>-->
+<!--							<exclude>ru.practicum.shareit.booking.BookingMapper</exclude>-->
+<!--							<exclude>ru.practicum.shareit.booking.validation.ValidateState</exclude>-->
+<!--							<exclude>ru.practicum.shareit.item.CommentMapper</exclude>-->
+<!--							<exclude>ru.practicum.shareit.item.dto.CommentDto</exclude>-->
+<!--							<exclude>ru.practicum.shareit.item.dto.ItemDto</exclude>-->
+<!--							<exclude>ru.practicum.shareit.item.model.Item</exclude>-->
+<!--							<exclude>ru.practicum.shareit.item.model.Comment</exclude>-->
+<!--							<exclude>ru.practicum.shareit.item.ItemMapper</exclude>-->
+<!--							<exclude>ru.practicum.shareit.booking.model.State</exclude>-->
+<!--							<exclude>ru.practicum.shareit.booking.model.Status</exclude>-->
+<!--							<exclude>ru.practicum.shareit.booking.model.Booking</exclude>-->
+<!--							<exclude>ru.practicum.shareit.requests.dto.ItemRequestDto</exclude>-->
+<!--							<exclude>ru.practicum.shareit.requests.dto.RequestDto</exclude>-->
+<!--							<exclude>ru.practicum.shareit.requests.model.ItemRequest</exclude>-->
+<!--							<exclude>ru.practicum.shareit.user.model.User</exclude>-->
+<!--							<exclude>ru.practicum.shareit.user.dto.UserDto</exclude>-->
+<!--							<exclude>ru.practicum.shareit.user.UserMapper</exclude>-->
+<!--						</excludes>-->
 					</configuration>
 					<executions>
 						<execution>
@@ -162,6 +186,7 @@
 								<rules>
 									<rule>
 										<element>BUNDLE</element>
+
 										<limits>
 											<limit>
 												<counter>INSTRUCTION</counter>
@@ -194,6 +219,7 @@
 												<maximum>1</maximum>
 											</limit>
 										</limits>
+
 									</rule>
 								</rules>
 							</configuration>

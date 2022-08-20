@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.exception.ItemRequestNotFoundException;
 import ru.practicum.shareit.requests.service.ItemRequestServiceImpl;
+import ru.practicum.shareit.user.exception.UserNotFoundException;
 
 import java.util.List;
 
@@ -24,7 +25,6 @@ import static ru.practicum.shareit.requests.RequestTestData.*;
 public class RequestServiceTest {
     @Autowired
     private final ItemRequestServiceImpl itemRequestService;
-
 
     @Test
     void testGetRequestById() {
@@ -58,5 +58,11 @@ public class RequestServiceTest {
         assertThat(itemRequestDtoFromSQL, equalTo(List.of(itemRequestDto)));
     }
 
+    @Test
+    void testCheckUser() {
+        assertThrows(UserNotFoundException.class, () -> itemRequestService.checkUser(200L));
+        //ItemRequestDTo noargsconctructor
+        ItemRequestDto itemRequestDto = new ItemRequestDto();
+    }
 }
 

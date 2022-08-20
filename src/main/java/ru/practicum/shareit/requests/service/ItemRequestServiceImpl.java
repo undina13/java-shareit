@@ -75,7 +75,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         return createItemRequestDto(itemRequest);
     }
 
-    public ItemRequestDto createItemRequestDto(ItemRequest itemRequest) {
+    private ItemRequestDto createItemRequestDto(ItemRequest itemRequest) {
         List<ItemDto> items = itemRepository
                 .findByRequest(itemRequest)
                 .stream()

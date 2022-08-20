@@ -44,7 +44,7 @@ public class UserServiceTest {
 
     @Test
     @DirtiesContext
-    void testSaveUpdateUser() {
+    void testUpdateUser() {
         userDto2.setName("User2new");
         UserDto userDtoFromSQL = userService.update(2L, userDto2);
         assertThat(userDtoFromSQL, equalTo(userDto2));
@@ -52,12 +52,29 @@ public class UserServiceTest {
     }
 
     @Test
+    void testUpdateUserNotFound() {
+        assertThrows(UserNotFoundException.class, () -> userService.update(20L, userDto2));
+    }
+
+    @Test
     @DirtiesContext
-    void testSaveUpdateUserEmail() {
+    void tesUpdateUserEmail() {
         userDto2.setEmail("User2new@mail.ru");
         UserDto userDtoFromSQL = userService.update(2L, userDto2);
         assertThat(userDtoFromSQL, equalTo(userDto2));
         userDto2.setEmail("user2@mail.ru");
+    }
+
+    @Test
+    @DirtiesContext
+    void testUpdateUserEmailName() {
+        userDto2.setName(null);
+        userDto2.setEmail(null);
+        UserDto userDtoFromSQL = userService.update(2L, userDto2);
+        userDto2.setEmail("user2@mail.ru");
+        userDto2.setName("user2");
+       assertThat(userDtoFromSQL, equalTo(userDto2));
+
     }
 
     @Test

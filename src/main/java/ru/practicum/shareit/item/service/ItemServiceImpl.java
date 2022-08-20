@@ -123,7 +123,7 @@ public class ItemServiceImpl implements ItemService {
 
         BookingForItem next = bookings.stream()
                 .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
-                .min((booking, booking1) -> booking.getStart().compareTo(booking1.getStart()))
+                .min(Comparator.comparing(BookingForItem::getStart))
                 .orElse(null);
 
         if (last != null) {
@@ -142,6 +142,8 @@ public class ItemServiceImpl implements ItemService {
         if (comment.getText().isEmpty()) {
             throw new UserIsNotBookerException("text is empty");
         }
+        comment.setAuthor(userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("user not found")));
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
         List<BookingForItem> bookings = bookingRepository.findAllByItem(item);
         BookingForItem booking = bookings.stream()
@@ -152,8 +154,7 @@ public class ItemServiceImpl implements ItemService {
             throw new UserIsNotBookerException("user do not end booking;");
         }
         comment.setItem(item);
-        comment.setAuthor(userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("user not found")));
+
         return CommentMapper.toCommentDto(commentRepository.save(comment));
     }
 
