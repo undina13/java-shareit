@@ -188,6 +188,11 @@ public class ItemServiceTest {
         assertThrows(UserNotFoundException.class, () ->
                 itemService.createComment(300L, 1L, commentDto));
     }
+    @Test
+    void testCreateCommentWrongBookingUser() {
+        assertThrows(UserIsNotBookerException.class, () ->
+                itemService.createComment(1L, 1L, commentDto));
+    }
 
     @Test
     @DirtiesContext
