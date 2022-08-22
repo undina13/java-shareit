@@ -18,6 +18,7 @@ import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.exception.UserIsNotOwnerException;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -37,12 +38,14 @@ public class BookingServiceTest {
     @Test
     void testGetBookingById() {
         BookingDtoToUser bookingDtoFromSQL = bookingService.getBookingById(2L, 1L);
+        bookingDtoFromSQL.getItem().setComments(new ArrayList<>());
         assertThat(bookingDtoFromSQL, equalTo(bookingDtoToUser1));
     }
 
     @Test
     void testGetBookingByIdTwo() {
         BookingDtoToUser bookingDtoFromSQL = bookingService.getBookingById(1L, 1L);
+        bookingDtoFromSQL.getItem().setComments(new ArrayList<>());
         assertThat(bookingDtoFromSQL, equalTo(bookingDtoToUser1));
     }
 
@@ -61,6 +64,7 @@ public class BookingServiceTest {
     void testCreate() {
         long bookingId = bookingService.create(2L, 1L, createdDto).getId();
         BookingDtoToUser bookingDtoFromSQL = bookingService.getBookingById(2L, bookingId);
+        bookingDtoFromSQL.getItem().setComments(new ArrayList<>());
         assertThat(bookingDtoFromSQL, equalTo(bookingDtoToUserCreated));
     }
 
@@ -87,6 +91,7 @@ public class BookingServiceTest {
     @Test
     void testApproveStatus() {
         BookingDtoToUser bookingDtoFromSQL = bookingService.approveStatus(1L, 2L, true);
+        bookingDtoFromSQL.getItem().setComments(new ArrayList<>());
         assertThat(bookingDtoFromSQL, equalTo(bookingDtoToUser2));
     }
 
@@ -94,6 +99,7 @@ public class BookingServiceTest {
     void testApproveStatusRejected() {
         bookingDtoToUser2.setStatus(Status.REJECTED);
         BookingDtoToUser bookingDtoFromSQL = bookingService.approveStatus(1L, 2L, false);
+        bookingDtoFromSQL.getItem().setComments(new ArrayList<>());
         assertThat(bookingDtoFromSQL, equalTo(bookingDtoToUser2));
         bookingDtoToUser2.setStatus(Status.APPROVED);
     }

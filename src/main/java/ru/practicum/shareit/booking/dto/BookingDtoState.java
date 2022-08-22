@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.Status;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
 import javax.validation.constraints.Future;
@@ -30,11 +32,11 @@ public class BookingDtoState {
 
     @NotEmpty
     @NotNull
-    private Item item;
+    private ItemDto item;
 
     @NotEmpty
     @NotNull
-    private User booker;
+    private UserDto booker;
 
     private Status status;
 
