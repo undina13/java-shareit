@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking.service;
 
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.BookingMapper;
@@ -89,7 +90,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDtoState> getBookingCurrentUser(long userId, State stateEnum, int from, int size) {
         User booker = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-        return bookingRepository.findAllByBooker(booker, PageRequest.of(from / size, size))
+        return bookingRepository.findAllByBooker(booker, PageRequest.of(from / size, size,  Sort.by(Sort.Direction.DESC, "start")))
                 .stream()
                 .map(BookingMapper::toBookingDtoState)
                 .filter(bookingDtoState -> bookingDtoState.getStates().contains(stateEnum))
@@ -100,7 +101,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDtoState> getBookingCurrentOwner(long userId, State stateEnum, int from, int size) {
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-        return bookingRepository.findAllByItemOwner(owner, PageRequest.of(from / size, size))
+        return bookingRepository.findAllByItemOwner(owner, PageRequest.of(from / size, size,  Sort.by(Sort.Direction.DESC, "start")))
                 .stream()
                 .map(BookingMapper::toBookingDtoState)
                 .filter(bookingDtoState -> bookingDtoState.getStates().contains(stateEnum))
