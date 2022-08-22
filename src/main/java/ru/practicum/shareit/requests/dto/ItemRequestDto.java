@@ -16,8 +16,11 @@ import java.util.List;
 public class ItemRequestDto {
 
     long id;
+
     List<ItemDto> items;
+
     @NotEmpty
     private String description;
+
     private String created;
 }
