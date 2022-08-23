@@ -19,6 +19,7 @@ import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.exception.UserIsNotOwnerException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.requests.exception.ItemRequestNotGoodParametrsException;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
@@ -89,8 +90,12 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDtoState> getBookingCurrentUser(long userId, State stateEnum, int from, int size) {
+        if (from < 0) {
+            throw new ItemRequestNotGoodParametrsException("from < 0");
+        }
         User booker = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-        return bookingRepository.findAllByBooker(booker, PageRequest.of(from / size, size,  Sort.by(Sort.Direction.DESC, "start")))
+        return bookingRepository.findAllByBooker(booker, PageRequest.of(from / size, size,
+                Sort.by(Sort.Direction.DESC, "start")))
                 .stream()
                 .map(BookingMapper::toBookingDtoState)
                 .filter(bookingDtoState -> bookingDtoState.getStates().contains(stateEnum))
@@ -100,8 +105,12 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDtoState> getBookingCurrentOwner(long userId, State stateEnum, int from, int size) {
+        if (from < 0) {
+            throw new ItemRequestNotGoodParametrsException("from < 0");
+        }
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-        return bookingRepository.findAllByItemOwner(owner, PageRequest.of(from / size, size,  Sort.by(Sort.Direction.DESC, "start")))
+        return bookingRepository.findAllByItemOwner(owner, PageRequest.of(from / size, size,
+                Sort.by(Sort.Direction.DESC, "start")))
                 .stream()
                 .map(BookingMapper::toBookingDtoState)
                 .filter(bookingDtoState -> bookingDtoState.getStates().contains(stateEnum))

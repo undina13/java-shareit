@@ -12,6 +12,7 @@ import ru.practicum.shareit.requests.ItemRequestMapper;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.dto.RequestDto;
 import ru.practicum.shareit.requests.exception.ItemRequestNotFoundException;
+import ru.practicum.shareit.requests.exception.ItemRequestNotGoodParametrsException;
 import ru.practicum.shareit.requests.model.ItemRequest;
 import ru.practicum.shareit.requests.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
@@ -59,6 +60,9 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public List<ItemRequestDto> getAll(long userId, int from, int size) {
+        if (from < 0) {
+            throw new ItemRequestNotGoodParametrsException("from < 0");
+        }
         User user = checkUser(userId);
         return itemRequestRepository.findAllByRequestorIsNot(user, PageRequest
                 .of(from / size, size, Sort.by(Sort.Direction.DESC, "created")))

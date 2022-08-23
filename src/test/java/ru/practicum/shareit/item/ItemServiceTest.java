@@ -13,6 +13,7 @@ import ru.practicum.shareit.item.exception.UserIsNotBookerException;
 import ru.practicum.shareit.item.exception.UserIsNotOwnerException;
 import ru.practicum.shareit.item.service.ItemServiceImpl;
 import ru.practicum.shareit.requests.exception.ItemRequestNotFoundException;
+import ru.practicum.shareit.requests.exception.ItemRequestNotGoodParametrsException;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 
 import java.util.ArrayList;
@@ -138,8 +139,19 @@ public class ItemServiceTest {
     }
 
     @Test
+    void testGetAllItemsByWrongFrom() {
+        assertThrows(ItemRequestNotGoodParametrsException.class, () -> itemService.getAllItemsByUser(-1, 10, 2L));
+    }
+
+    @Test
     void testGetAllItemsByWrongUser() {
         assertThrows(UserNotFoundException.class, () -> itemService.getAllItemsByUser(1, 10, 20L));
+    }
+
+
+    @Test
+    void testGetAllItemsWrongFrom() {
+        assertThrows(ItemRequestNotGoodParametrsException.class, () -> itemService.search(-1, 10, "item1"));
     }
 
     @Test
@@ -150,6 +162,12 @@ public class ItemServiceTest {
         assertThat(items, equalTo(List.of(itemDto1)));
         itemDto1.setComments(new ArrayList<>());
     }
+
+    @Test
+    void testSearchWrongFrom() {
+        assertThrows(ItemRequestNotGoodParametrsException.class, () -> itemService.search(-1, 10, "item1"));
+    }
+
 
     @Test
     void testSearchEmpty() {

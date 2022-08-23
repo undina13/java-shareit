@@ -19,6 +19,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.requests.exception.ItemRequestNotFoundException;
+import ru.practicum.shareit.requests.exception.ItemRequestNotGoodParametrsException;
 import ru.practicum.shareit.requests.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
@@ -94,6 +95,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> getAllItemsByUser(int from, int size, long userId) {
+        if (from < 0) {
+            throw new ItemRequestNotGoodParametrsException("from < 0");
+        }
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         return itemRepository.findByOwner(owner,  PageRequest.of(from / size, size))
                 .stream()
@@ -105,6 +109,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> search(int from, int size, String text) {
+        if (from < 0) {
+            throw new ItemRequestNotGoodParametrsException("from < 0");
+        }
         if (text.equals("")) {
             return new ArrayList<>();
         }

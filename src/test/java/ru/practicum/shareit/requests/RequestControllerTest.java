@@ -75,19 +75,6 @@ public class RequestControllerTest {
     }
 
     @Test
-    void testGetAllException() throws Exception {
-        when(itemRequestService.getAll(anyLong(), anyInt(), anyInt()))
-                .thenReturn(List.of(itemRequestDto));
-
-        mvc.perform(get("/requests/all?from=-1&size=15")
-                .characterEncoding(StandardCharsets.UTF_8)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Sharer-User-Id", 3L)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
     void testGetById() throws Exception {
         when(itemRequestService.getById(anyLong(), anyLong()))
                 .thenReturn(itemRequestDto);
@@ -100,61 +87,5 @@ public class RequestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(itemRequestDto)));
     }
-
-
-//    @Test
-//    void testGetBookingById() throws Exception {
-//        when(bookingService.getBookingById(anyLong(), anyLong()))
-//                .thenReturn(bookingDtoToUser1);
-//
-//        mvc.perform(get("/bookings/1")
-//                .characterEncoding(StandardCharsets.UTF_8)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .header("X-Sharer-User-Id", 2L)
-//                .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andExpect(content().json(mapper.writeValueAsString(bookingDtoToUser1)));
-//    }
-//
-//    @Test
-//    void testGeBookingCurrentUser() throws Exception {
-//        when(bookingService.getBookingCurrentUser(anyLong(), any(), anyInt(), anyInt()))
-//                .thenReturn(List.of(bookingDtoState));
-//
-//        mvc.perform(get("/bookings?state=ALL")
-//                .characterEncoding(StandardCharsets.UTF_8)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .header("X-Sharer-User-Id", 2L)
-//                .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andExpect(content().json(mapper.writeValueAsString(List.of(bookingDtoState))));
-//    }
-//
-//    @Test
-//    void testGeBookingCurrentOwner() throws Exception {
-//        when(bookingService.getBookingCurrentOwner(anyLong(), any(), anyInt(), anyInt()))
-//                .thenReturn(List.of(bookingDtoState));
-//
-//        mvc.perform(get("/bookings/owner?state=ALL")
-//                .characterEncoding(StandardCharsets.UTF_8)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .header("X-Sharer-User-Id", 1L)
-//                .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andExpect(content().json(mapper.writeValueAsString(List.of(bookingDtoState))));
-//    }
-//
-//    @Test
-//    void testGeBookingCurrentOwnerWrongState() throws Exception {
-//        when(bookingService.getBookingCurrentOwner(anyLong(), any(), anyInt(), anyInt()))
-//                .thenReturn(List.of(bookingDtoState));
-//
-//        mvc.perform(get("/bookings/owner?state=text")
-//                .characterEncoding(StandardCharsets.UTF_8)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .header("X-Sharer-User-Id", 1L)
-//                .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isBadRequest());
-//    }
 
 }

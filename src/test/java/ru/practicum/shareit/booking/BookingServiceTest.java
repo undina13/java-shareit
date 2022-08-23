@@ -16,6 +16,7 @@ import ru.practicum.shareit.booking.service.BookingServiceImpl;
 import ru.practicum.shareit.item.exception.ItemNotAvalibleException;
 import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.exception.UserIsNotOwnerException;
+import ru.practicum.shareit.requests.exception.ItemRequestNotGoodParametrsException;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 
 import java.util.ArrayList;
@@ -133,6 +134,12 @@ public class BookingServiceTest {
     }
 
     @Test
+    void testGetBookingCurrentUserWrongFrom() {
+        assertThrows(ItemRequestNotGoodParametrsException.class, () -> bookingService
+                .getBookingCurrentUser(2L, State.PAST, -1, 10));
+    }
+
+    @Test
     void testGetBookingCurrentOwner() {
         List<BookingDtoState> bookings = bookingService.getBookingCurrentOwner(1L, State.PAST, 0, 10);
         assertThat(bookings, equalTo(List.of(bookingDtoState)));
@@ -142,6 +149,13 @@ public class BookingServiceTest {
     void testGetBookingWrongCurrentOwner() {
         assertThrows(UserNotFoundException.class, () -> bookingService
                 .getBookingCurrentOwner(100L, State.PAST, 0, 10));
+
+    }
+
+    @Test
+    void testGetBookingCurrentOwnerWrongFrom() {
+        assertThrows(ItemRequestNotGoodParametrsException.class, () ->
+                bookingService.getBookingCurrentOwner(1L, State.PAST, -1, 10));
 
     }
 }

@@ -11,7 +11,6 @@ import ru.practicum.shareit.booking.exception.ErrorResponse;
 import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.booking.validation.ValidateState;
-import ru.practicum.shareit.requests.exception.ItemRequestNotGoodParametrsException;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -54,9 +53,6 @@ public class BookingController {
                                                 @Valid @RequestParam(defaultValue = "1") int from,
                                                 @RequestParam(defaultValue = "10") int size) {
         log.info("get booking current user id ={}", userId);
-        if (from < 0) {
-            throw new ItemRequestNotGoodParametrsException("from < 0");
-        }
         State stateEnum = ValidateState.validateStatus(state);
         return bookingService.getBookingCurrentUser(userId, stateEnum, from, size);
     }
@@ -64,12 +60,9 @@ public class BookingController {
     @GetMapping("/owner")
     List<BookingDtoState> getBookingCurrentOwner(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
                                                  @RequestParam(defaultValue = "ALL") String state,
-                                                 @Valid @RequestParam(defaultValue = "1") int from,
+                                                 @RequestParam(defaultValue = "1") int from,
                                                  @RequestParam(defaultValue = "10") int size) {
         log.info("get booking current owner id ={}", userId);
-        if (from < 0) {
-            throw new ItemRequestNotGoodParametrsException("from < 0");
-        }
         State stateEnum = ValidateState.validateStatus(state);
         return bookingService.getBookingCurrentOwner(userId, stateEnum, from, size);
     }

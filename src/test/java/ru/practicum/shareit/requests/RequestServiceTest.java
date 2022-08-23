@@ -8,6 +8,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.exception.ItemRequestNotFoundException;
+import ru.practicum.shareit.requests.exception.ItemRequestNotGoodParametrsException;
 import ru.practicum.shareit.requests.service.ItemRequestServiceImpl;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 
@@ -61,8 +62,13 @@ public class RequestServiceTest {
     @Test
     void testCheckUser() {
         assertThrows(UserNotFoundException.class, () -> itemRequestService.checkUser(200L));
-        //ItemRequestDTo noargsconctructor
-        ItemRequestDto itemRequestDto = new ItemRequestDto();
+
+    }
+
+
+    @Test
+    void testGetAllWrongFrom() {
+        assertThrows(ItemRequestNotGoodParametrsException.class, () -> itemRequestService.getAll(1L, -1, 10));
     }
 }
 
