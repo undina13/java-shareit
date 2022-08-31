@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingDtoItem;
-import ru.practicum.shareit.requests.model.ItemRequest;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -27,7 +26,7 @@ public class ItemDto {
     @NotNull
     Boolean available;
 
-    ItemRequest request;
+    Long requestId;
 
     BookingDtoItem nextBooking;
 
