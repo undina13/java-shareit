@@ -1,5 +1,6 @@
-package ru.practicum.shareit.booking;
+package java.ru.practicum.shareit.booking;
 
+import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoState;
 import ru.practicum.shareit.booking.dto.BookingDtoToUser;
@@ -11,10 +12,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static ru.practicum.shareit.item.ItemTestData.item1;
-import static ru.practicum.shareit.item.ItemTestData.itemDto1;
-import static ru.practicum.shareit.user.UserTestData.user2;
-import static ru.practicum.shareit.user.UserTestData.userDto2;
+import static java.ru.practicum.shareit.item.ItemTestData.item1;
+import static java.ru.practicum.shareit.item.ItemTestData.itemDto1;
+import static java.ru.practicum.shareit.user.UserTestData.user2;
+import static java.ru.practicum.shareit.user.UserTestData.userDto2;
 
 public class BookingTestData {
     public static final BookingDtoToUser bookingDtoToUser1 = BookingDtoToUser.builder().id(1L)

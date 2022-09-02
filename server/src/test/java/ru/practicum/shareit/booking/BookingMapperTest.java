@@ -1,13 +1,15 @@
-package ru.practicum.shareit.booking;
+package java.ru.practicum.shareit.booking;
 
 import org.junit.jupiter.api.Test;
+import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.dto.BookingDtoState;
 
 import java.util.ArrayList;
 
+import static java.ru.practicum.shareit.booking.BookingTestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static ru.practicum.shareit.booking.BookingTestData.*;
+
 
 public class BookingMapperTest {
     @Test

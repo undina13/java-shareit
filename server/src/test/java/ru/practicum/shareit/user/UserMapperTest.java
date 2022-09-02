@@ -1,13 +1,14 @@
-package ru.practicum.shareit.user;
+package java.ru.practicum.shareit.user;
 
 import org.junit.jupiter.api.Test;
+import ru.practicum.shareit.user.UserMapper;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static ru.practicum.shareit.user.UserTestData.user1;
-import static ru.practicum.shareit.user.UserTestData.userDto1;
+import static java.ru.practicum.shareit.user.UserTestData.user1;
+import static java.ru.practicum.shareit.user.UserTestData.userDto1;
 
 public class UserMapperTest {
     @Test

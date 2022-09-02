@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item;
+package java.ru.practicum.shareit.item;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.practicum.shareit.item.ItemController;
 import ru.practicum.shareit.item.service.ItemServiceImpl;
 
 import java.nio.charset.StandardCharsets;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.practicum.shareit.item.ItemTestData.*;
+import static java.ru.practicum.shareit.item.ItemTestData.*;
 
 @WebMvcTest(controllers = ItemController.class)
 public class ItemControllerTest {

@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking;
+package java.ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -22,10 +22,11 @@ import ru.practicum.shareit.user.exception.UserNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.ru.practicum.shareit.booking.BookingTestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.practicum.shareit.booking.BookingTestData.*;
+
 
 
 @SpringBootTest
