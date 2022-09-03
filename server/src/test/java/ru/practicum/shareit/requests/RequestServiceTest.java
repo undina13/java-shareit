@@ -1,4 +1,4 @@
-package java.ru.practicum.shareit.requests;
+package ru.practicum.shareit.requests;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static java.ru.practicum.shareit.requests.RequestTestData.*;
+import static ru.practicum.shareit.requests.RequestTestData.*;
 
 
 @SpringBootTest

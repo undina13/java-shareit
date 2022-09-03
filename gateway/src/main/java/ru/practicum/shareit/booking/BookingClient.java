@@ -44,4 +44,5 @@ public class BookingClient extends BaseClient {
     public ResponseEntity<Object> getBooking(long userId, Long bookingId) {
         return get("/" + bookingId, userId);
     }
+
 }

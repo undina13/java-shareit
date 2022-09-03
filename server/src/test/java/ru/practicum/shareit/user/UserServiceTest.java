@@ -1,4 +1,4 @@
-package java.ru.practicum.shareit.user;
+package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -13,11 +13,10 @@ import ru.practicum.shareit.user.service.UserService;
 
 import java.util.List;
 
-import static java.ru.practicum.shareit.user.UserTestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
+import static ru.practicum.shareit.user.UserTestData.*;
 
 @SpringBootTest
 @Transactional

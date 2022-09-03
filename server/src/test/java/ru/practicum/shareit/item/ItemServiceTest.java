@@ -1,4 +1,4 @@
-package java.ru.practicum.shareit.item;
+package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static java.ru.practicum.shareit.item.ItemTestData.*;
+import static ru.practicum.shareit.item.ItemTestData.*;
 
 @SpringBootTest
 @Transactional

@@ -1,4 +1,4 @@
-package java.ru.practicum.shareit.item;
+package ru.practicum.shareit.item;
 
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import static java.ru.practicum.shareit.user.UserTestData.user1;
-import static java.ru.practicum.shareit.user.UserTestData.user2;
+import static ru.practicum.shareit.user.UserTestData.user1;
+import static ru.practicum.shareit.user.UserTestData.user2;
 
 public class ItemTestData {
     public static ItemDto itemDto1 = ItemDto.builder()
