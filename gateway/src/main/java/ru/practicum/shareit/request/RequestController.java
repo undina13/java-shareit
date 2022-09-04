@@ -7,7 +7,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping(path = "/requests")
@@ -43,7 +42,7 @@ public class RequestController {
 
     @GetMapping("/{requestId}")
     public ResponseEntity<Object> getById(@RequestHeader("X-Sharer-User-Id") long userId,
-                           @PathVariable long requestId) {
+                                          @PathVariable long requestId) {
         log.info("get request id = {}", requestId);
         return requestClient.getById(userId, requestId);
     }

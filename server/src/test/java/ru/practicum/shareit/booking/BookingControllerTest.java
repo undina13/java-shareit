@@ -100,18 +100,4 @@ public class BookingControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(List.of(bookingDtoState))));
     }
-
-    @Test
-    void testGeBookingCurrentOwnerWrongState() throws Exception {
-        when(bookingService.getBookingCurrentOwner(anyLong(), any(), anyInt(), anyInt()))
-                .thenReturn(List.of(bookingDtoState));
-
-        mvc.perform(get("/bookings/owner?state=text")
-                .characterEncoding(StandardCharsets.UTF_8)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Sharer-User-Id", 1L)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
 }

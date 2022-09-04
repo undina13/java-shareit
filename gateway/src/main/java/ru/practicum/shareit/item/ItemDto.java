@@ -16,13 +16,13 @@ import java.util.List;
 public class ItemDto {
     long id;
 
-
+@NotEmpty
     String name;
 
-
+@NotEmpty
     String description;
 
-
+@NotNull
     Boolean available;
 
     Long requestId;

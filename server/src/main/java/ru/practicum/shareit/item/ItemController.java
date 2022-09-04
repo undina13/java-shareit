@@ -7,8 +7,6 @@ import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Slf4j
@@ -23,14 +21,14 @@ public class ItemController {
     }
 
     @PostMapping()
-    ItemDto create(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
-                   @RequestBody @Valid ItemDto itemDto) {
+    ItemDto create(@RequestHeader("X-Sharer-User-Id") long userId,
+                   @RequestBody ItemDto itemDto) {
         log.info("create item");
         return itemService.create(userId, itemDto);
     }
 
     @PatchMapping("/{itemId}")
-    ItemDto update(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
+    ItemDto update(@RequestHeader("X-Sharer-User-Id") long userId,
                    @PathVariable long itemId,
                    @RequestBody ItemDto itemDto) {
         log.info("update item id={}", itemId);
@@ -38,15 +36,15 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    ItemDto getItemById(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
+    ItemDto getItemById(@RequestHeader("X-Sharer-User-Id") long userId,
                         @PathVariable long itemId) {
         log.info("get item id={}", itemId);
         return itemService.getItemById(userId, itemId);
     }
 
     @GetMapping()
-    List<ItemDto> getAllItemsByUser(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
-                                    @Valid @RequestParam(defaultValue = "1") int from,
+    List<ItemDto> getAllItemsByUser(@RequestHeader("X-Sharer-User-Id") long userId,
+                                    @RequestParam(defaultValue = "1") int from,
                                     @RequestParam(defaultValue = "10") int size) {
         log.info("get all items from user id={}", userId);
         return itemService.getAllItemsByUser(from, size, userId);
@@ -55,16 +53,16 @@ public class ItemController {
 
     @GetMapping("search")
     List<ItemDto> search(@RequestParam(required = false) String text,
-     @Valid @RequestParam(defaultValue = "1") int from,
-    @RequestParam(defaultValue = "10") int size) {
+                         @RequestParam(defaultValue = "1") int from,
+                         @RequestParam(defaultValue = "10") int size) {
         log.info("search text={}", text);
         return itemService.search(from, size, text);
     }
 
     @PostMapping("/{itemId}/comment")
-    CommentDto createComment(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
+    CommentDto createComment(@RequestHeader("X-Sharer-User-Id") long userId,
                              @PathVariable long itemId,
-                             @RequestBody @Valid CommentDto commentDto) {
+                             @RequestBody CommentDto commentDto) {
         log.info("create comment");
         return itemService.createComment(userId, itemId, commentDto);
     }
