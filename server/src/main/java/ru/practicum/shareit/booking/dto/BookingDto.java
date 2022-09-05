@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.model.Status;
 
-import javax.validation.constraints.Future;
+//import javax.validation.constraints.Future;
 import java.time.LocalDateTime;
 
 @Data
@@ -16,10 +16,10 @@ import java.time.LocalDateTime;
 public class BookingDto {
     private Long id;
 
-    @Future
+  //  @Future
     private LocalDateTime start;
 
-    @Future
+  //  @Future
     private LocalDateTime end;
 
     private long itemId;

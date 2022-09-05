@@ -16,16 +16,16 @@ import java.util.List;
 public class ItemDto {
     long id;
 
-@NotEmpty
-    String name;
+    @NotEmpty
+    private String name;
 
-@NotEmpty
-    String description;
+    @NotEmpty
+    private String description;
 
-@NotNull
-    Boolean available;
+    @NotNull
+    private Boolean available;
 
-    Long requestId;
+    private Long requestId;
 
-   List<CommentDto> comments;
+    private List<CommentDto> comments;
 }

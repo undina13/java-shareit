@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.dto.ItemDto;
 
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Data
@@ -19,7 +18,6 @@ public class ItemRequestDto {
 
     List<ItemDto> items;
 
-    @NotEmpty
     private String description;
 
     private String created;
